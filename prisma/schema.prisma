@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Tag {
+  id    String @id @default(cuid())
+  name  String
+  users User[]
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -20,4 +26,8 @@ model User {
   password  String
   document  String
   createdAt DateTime @default(now())
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id])
+
+  @@index([tagId]) // Adiciona um índice para melhor performance
 }
